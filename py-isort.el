@@ -40,7 +40,7 @@
              (t
               (error "invalid rcs patch or internal error in py-isort-apply-rcs-patch")))))))))
 
-
+;;;###autoload
 (defun py-isort ()
   "Formats the current buffer according to the isort tool."
   (interactive)
@@ -67,7 +67,7 @@
     (kill-buffer patchbuf)
     (delete-file tmpfile)))
 
-
+;;;###autoload
 (defun py-isort-before-save ()
   (interactive)
   (when (eq major-mode 'python-mode) (py-isort)))
