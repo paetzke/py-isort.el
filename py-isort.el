@@ -14,7 +14,7 @@
 ;; To automatically sort imports when saving a python file, use the
 ;; following code:
 
-;;   (add-hook 'before-save-hook 'python-isort-before-save)
+;;   (add-hook 'before-save-hook 'py-isort-before-save)
 
 ;;; Code:
 
