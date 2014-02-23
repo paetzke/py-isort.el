@@ -3,7 +3,7 @@
 ;; Copyright (C) 2014, Friedrich Paetzke <f.paetzke@gmail.com>
 
 ;; Author: Friedrich Paetzke <f.paetzke@gmail.com>
-;; URL: https://github.com/paetzke/py-isort
+;; URL: https://github.com/paetzke/py-isort.el
 ;; Version: 0.1
 
 ;;; Commentary:
