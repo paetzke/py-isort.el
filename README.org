@@ -3,15 +3,14 @@
 Copyright (C) 2014, Friedrich Paetzke (f.paetzke@gmail.com)
 All rights reserved.
 
-py-isort.el integrates isort into Emacs.
+Provides the `py-isort' command, which uses the external "isort" tool to tidy up the imports in the current buffer.
 
-Install isort and download py-isort.el
+Install =isort= and download =py-isort=
 
 #+BEGIN_SRC bash
 $ pip install isort
 $ wget https://raw.github.com/paetzke/py-isort.el/master/py-isort.el -O /your/path/py-isort.el
 #+END_SRC
-
 
 Add the before-save-hook to your ~/.emacs
 
@@ -19,6 +18,13 @@ Add the before-save-hook to your ~/.emacs
 (add-to-list 'load-path "/your/path/")
 (require 'py-isort)
 (add-hook 'before-save-hook 'python-isort-before-save)
+#+END_SRC
+
+You can also install py-isort with MELPA:
+
+#+BEGIN_SRC lisp
+M-x package-install RET
+py-isort RET
 #+END_SRC
 
 Now every time you save your Python file isort will be executed on the current buffer.
