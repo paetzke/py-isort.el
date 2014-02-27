@@ -16,7 +16,24 @@
 
 ;;   (add-hook 'before-save-hook 'py-isort-before-save)
 
+;; To customize the behaviour of "isort" you can set the
+;; py-isort-options e.g.
+
+;;   (setq py-isort-options '("--lines=100"))
+
 ;;; Code:
+
+(defgroup py-isort nil
+  "Use isort to sort the imports in a Python buffer."
+  :group 'convenience
+  :prefix "py-isort-")
+
+
+(defcustom py-isort-options nil
+  "Options used for isort."
+  :group 'py-isort
+  :type '(repeat (string :tag "option")))
+
 
 (defun py-isort-apply-rcs-patch (patch-buffer)
   "Apply an RCS-formatted diff from PATCH-BUFFER to the current buffer."
@@ -51,6 +68,7 @@
              (t
               (error "invalid rcs patch or internal error in py-isort-apply-rcs-patch")))))))))
 
+
 ;;;###autoload
 (defun py-isort ()
   "Uses the \"isort\" tool to reformat the current buffer."
@@ -66,7 +84,8 @@
     (with-current-buffer patchbuf
       (erase-buffer))
     (write-region nil nil tmpfile)
-    (if (zerop (call-process "isort" nil errbuf nil "" tmpfile))
+    (if (zerop (apply 'call-process "isort" nil errbuf nil
+                      (append `(" " ,tmpfile) py-isort-options)))
         (if (zerop (call-process-region (point-min) (point-max) "diff" nil patchbuf nil "-n" "-" tmpfile))
             (progn
               (kill-buffer errbuf)
@@ -77,6 +96,7 @@
       (message "Could not apply isort. Check errors for details"))
     (kill-buffer patchbuf)
     (delete-file tmpfile)))
+
 
 ;;;###autoload
 (defun py-isort-before-save ()
