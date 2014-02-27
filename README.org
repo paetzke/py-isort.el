@@ -1,9 +1,9 @@
-** py-isort.el
+* py-isort.el
 
 Copyright (C) 2014, Friedrich Paetzke (f.paetzke@gmail.com)
 All rights reserved.
 
-Provides the `py-isort' command, which uses the external "isort" tool to tidy up the imports in the current buffer.
+Provides the =py-isort= command, which uses the external =isort= tool to tidy up the imports in the current buffer.
 
 Install =isort= and download =py-isort=
 
@@ -27,7 +27,13 @@ M-x package-install RET
 py-isort RET
 #+END_SRC
 
-Now every time you save your Python file isort will be executed on the current buffer.
+Now every time you save your Python file =isort= will be executed on the current buffer.
+
+To customize the behaviour of =isort= you can set the =py-isort-options= e.g.
+
+#+BEGIN_SRC lisp
+(setq py-isort-options '("--lines=100"))
+#+END_SRC
 
 
 [[https://bitdeli.com/free][https://d2weczhvl823v0.cloudfront.net/paetzke/py-isort.el/trend.png]]
