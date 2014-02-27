@@ -35,6 +35,13 @@ To customize the behaviour of =isort= you can set the =py-isort-options= e.g.
 (setq py-isort-options '("--lines=100"))
 #+END_SRC
 
+** CREDITS
+
+Thanks to:
+
+- Steve Purcell for committing a patch.
+- Syohei Yoshida for committing a patch.
+
 ** CHANGELOG
 
 *** 0.2
