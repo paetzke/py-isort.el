@@ -1,8 +1,5 @@
 * py-isort.el
 
-Copyright (C) 2014, Friedrich Paetzke (f.paetzke@gmail.com)
-All rights reserved.
-
 Provides the =py-isort= command, which uses the external =isort= tool to tidy up the imports in the current buffer.
 
 Install =isort= and download =py-isort=
@@ -48,4 +45,7 @@ Thanks to:
 - Added options to change =isort='s behaviour.
 
 
-[[https://bitdeli.com/free][https://d2weczhvl823v0.cloudfront.net/paetzke/py-isort.el/trend.png]]
+
+Copyright (C) 2014, Friedrich Paetzke (paetzke@fastmail.fm)
+
+All rights reserved.
