@@ -1,9 +1,9 @@
 ;;; py-isort.el --- Use isort to sort the imports in a Python buffer
 
-;; Copyright (C) 2014, Friedrich Paetzke <f.paetzke@gmail.com>
+;; Copyright (C) 2014, Friedrich Paetzke <paetzke@fastmail.fm>
 
-;; Author: Friedrich Paetzke <f.paetzke@gmail.com>
-;; URL: https://github.com/paetzke/py-isort.el
+;; Author: Friedrich Paetzke <paetzke@fastmail.fm>
+;; URL: http://paetzke.me/project/py-isort.el
 ;; Version: 0.2
 
 ;;; Commentary:
