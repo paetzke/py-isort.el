@@ -73,6 +73,8 @@
 (defun py-isort ()
   "Uses the \"isort\" tool to reformat the current buffer."
   (interactive)
+  (when (not (executable-find "isort"))
+    (error "\"isort\" command not found. Install isort with \"pip install isort\""))
   (let ((tmpfile (make-temp-file "isort" nil ".py"))
         (patchbuf (get-buffer-create "*isort patch*"))
         (errbuf (get-buffer-create "*isort Errors*"))
@@ -93,7 +95,7 @@
           (py-isort-apply-rcs-patch patchbuf)
           (kill-buffer errbuf)
           (message "Applied isort."))
-      (message "Could not apply isort. Check errors for details"))
+      (error "Could not apply isort. Check *isort Errors* for details"))
     (kill-buffer patchbuf)
     (delete-file tmpfile)))
 
@@ -101,7 +103,9 @@
 ;;;###autoload
 (defun py-isort-before-save ()
   (interactive)
-  (when (eq major-mode 'python-mode) (py-isort)))
+  (when (eq major-mode 'python-mode)
+    (condition-case err (py-isort)
+      (error (message "%s" (error-message-string err))))))
 
 
 (provide 'py-isort)
