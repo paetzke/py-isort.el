@@ -43,6 +43,9 @@ Thanks to:
 
 ** CHANGELOG
 
+*** 0.3
+- Added check if isort executable is present.
+
 *** 0.2
 - Added options to change =isort='s behaviour.
 
