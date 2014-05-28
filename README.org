@@ -6,7 +6,8 @@ Install =isort= and download =py-isort=
 
 #+BEGIN_SRC bash
 $ pip install isort
-$ wget https://raw.github.com/paetzke/py-isort.el/master/py-isort.el -O /your/path/py-isort.el
+$ wget http://git.vanneva.com/py-isort.el.git/blob_plain/HEAD:/py-isort.el \
+       -O /your/path/py-isort.el
 #+END_SRC
 
 Add the before-save-hook to your ~/.emacs
@@ -36,8 +37,9 @@ To customize the behaviour of =isort= you can set the =py-isort-options= e.g.
 
 Thanks to:
 
-- Steve Purcell for committing a patch.
-- Syohei Yoshida for committing a patch.
+- Fredrik Bergroth
+- Steve Purcell
+- Syohei Yoshida
 
 ** CHANGELOG
 
@@ -46,6 +48,4 @@ Thanks to:
 
 
 
-Copyright (C) 2014, Friedrich Paetzke (paetzke@fastmail.fm)
-
-All rights reserved.
+Copyright (C) 2014, Friedrich Paetzke (paetzke@fastmail.fm). All rights reserved.
