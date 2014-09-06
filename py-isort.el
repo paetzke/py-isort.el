@@ -55,7 +55,7 @@
                 (forward-line len)
                 (let ((text (buffer-substring start (point))))
                   (with-current-buffer target-buffer
-                    (decf line-offset len)
+                    (setq line-offset (+ line-offset len))
                     (goto-char (point-min))
                     (forward-line (- from len line-offset))
                     (insert text)))))
@@ -63,7 +63,7 @@
               (with-current-buffer target-buffer
                 (goto-char (point-min))
                 (forward-line (- from line-offset 1))
-                (incf line-offset len)
+                (setq line-offset (+ line-offset len))
                 (kill-whole-line len)))
              (t
               (error "invalid rcs patch or internal error in py-isort-apply-rcs-patch")))))))))
