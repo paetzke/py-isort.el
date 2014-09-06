@@ -4,7 +4,7 @@
 
 ;; Author: Friedrich Paetzke <paetzke@fastmail.fm>
 ;; URL: http://paetzke.me/project/py-isort.el
-;; Version: 0.3
+;; Version: 0.4
 
 ;;; Commentary:
 
