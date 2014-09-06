@@ -1,5 +1,7 @@
 * py-isort.el
 
+[[https://travis-ci.org/paetzke/py-isort.el][https://travis-ci.org/paetzke/py-isort.el.svg?branch=master]]
+
 Provides the =py-isort= command, which uses the external =isort= tool to tidy up the imports in the current buffer.
 
 Install =isort= and download =py-isort=
