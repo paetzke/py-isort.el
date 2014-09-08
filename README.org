@@ -45,6 +45,9 @@ Thanks to:
 
 ** CHANGELOG
 
+*** 0.5
+- Fixed typo.
+
 *** 0.4
 - Replaced incf and decf.
 
