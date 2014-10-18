@@ -75,19 +75,26 @@
   (interactive)
   (when (not (executable-find "isort"))
     (error "\"isort\" command not found. Install isort with \"pip install isort\""))
-  (let ((tmpfile (make-temp-file "isort" nil ".py"))
+  (let (
+        (default-directory (file-name-directory buffer-file-name))
+        (tmpfile (make-temp-file "isort" nil ".py"))
         (patchbuf (get-buffer-create "*isort patch*"))
         (errbuf (get-buffer-create "*isort Errors*"))
         (coding-system-for-read 'utf-8)
-        (coding-system-for-write 'utf-8))
+        (coding-system-for-write 'utf-8)
+        )
+
     (with-current-buffer errbuf
       (setq buffer-read-only nil)
       (erase-buffer))
     (with-current-buffer patchbuf
       (erase-buffer))
     (write-region nil nil tmpfile)
+
     (if (zerop (apply 'call-process "isort" nil errbuf nil
-                      (append `(" " ,tmpfile) py-isort-options)))
+                      (append `(" " , tmpfile, " ",
+                                (concat "--settings-path=" default-directory))
+                              py-isort-options)))
         (if (zerop (call-process-region (point-min) (point-max) "diff" nil patchbuf nil "-n" "-" tmpfile))
             (progn
               (kill-buffer errbuf)
