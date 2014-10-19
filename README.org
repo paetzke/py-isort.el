@@ -8,7 +8,7 @@ Install =isort= and download =py-isort=
 
 #+BEGIN_SRC bash
 $ pip install isort
-$ wget http://git.vanneva.com/py-isort.el.git/blob_plain/HEAD:/py-isort.el \
+$ wget https://raw.githubusercontent.com/paetzke/py-isort.el/master/py-isort.el \
        -O /your/path/py-isort.el
 #+END_SRC
 
@@ -42,8 +42,13 @@ Thanks to:
 - Fredrik Bergroth
 - Steve Purcell
 - Syohei Yoshida
+- Tristan Seligmann
+- Jonathan Chu
 
 ** CHANGELOG
+
+*** 0.6
+- By passing the path of current buffer to isort (--setting-path), isort searches for configuration files in that path.
 
 *** 0.5
 - Fixed typo.
