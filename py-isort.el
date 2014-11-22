@@ -69,10 +69,16 @@
               (error "invalid rcs patch or internal error in py-isort-apply-rcs-patch")))))))))
 
 
+(defun py-isort-replace-region (filename)
+    (delete-region (region-beginning) (region-end))
+    (insert-file-contents filename)
+  )
+
+
 ;;;###autoload
-(defun py-isort ()
+(defun py-isort (&optional only-on-region)
   "Uses the \"isort\" tool to reformat the current buffer."
-  (interactive)
+  (interactive "r")
   (when (not (executable-find "isort"))
     (error "\"isort\" command not found. Install isort with \"pip install isort\""))
   (let (
@@ -89,7 +95,10 @@
       (erase-buffer))
     (with-current-buffer patchbuf
       (erase-buffer))
-    (write-region nil nil tmpfile)
+
+    (if (and only-on-region (use-region-p))
+        (write-region (region-beginning) (region-end) tmpfile)
+      (write-region nil nil tmpfile))
 
     (if (zerop (apply 'call-process "isort" nil errbuf nil
                       (append `(" " , tmpfile, " ",
@@ -99,12 +108,23 @@
             (progn
               (kill-buffer errbuf)
               (message "Buffer is already isorted"))
-          (py-isort-apply-rcs-patch patchbuf)
+
+          (if only-on-region
+              (py-isort-replace-region tmpfile)
+            (py-isort-apply-rcs-patch patchbuf))
+
           (kill-buffer errbuf)
           (message "Applied isort."))
       (error "Could not apply isort. Check *isort Errors* for details"))
     (kill-buffer patchbuf)
     (delete-file tmpfile)))
+
+
+;;;###autoload
+(defun py-isort-region ()
+  "Uses the \"isort\" tool to reformat the current region."
+  (interactive)
+  (py-isort t))
 
 
 ;;;###autoload
