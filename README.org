@@ -54,7 +54,7 @@ Thanks to:
 
 ** CHANGELOG
 
-*** Next
+*** 0.7
 - Add =py-isort-region= to sort the region in the buffer.
 
 *** 0.6
