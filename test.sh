@@ -23,8 +23,8 @@ on_error() {
 
 
 test_01() {
-    emacs -nw ./test_data/test_01_before.py -f py-isort-before-save -f save-buffer -f save-buffers-kill-terminal
-    diff ./test_data/test_01_before.py ./test_data/test_01_after.py
+    emacs -nw ./test_data/test_01/before.py -f py-isort-before-save -f save-buffer -f save-buffers-kill-terminal
+    diff ./test_data/test_01/before.py ./test_data/test_01/after.py
 
     if [ $? != 0 ]; then
         on_error "test_01"
@@ -33,8 +33,8 @@ test_01() {
 
 
 test_02() {
-    emacs -nw ./test_data/test_02/test_02_before.py -f py-isort-before-save -f save-buffer -f save-buffers-kill-terminal
-    diff ./test_data/test_02/test_02_before.py ./test_data/test_02/test_02_after.py
+    emacs -nw ./test_data/test_02/before.py -f py-isort-before-save -f save-buffer -f save-buffers-kill-terminal
+    diff ./test_data/test_02/before.py ./test_data/test_02/after.py
 
     if [ $? != 0 ]; then
         on_error "test_02"
