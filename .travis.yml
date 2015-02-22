@@ -3,4 +3,4 @@ python:
 - "3.4"
 install:
  - pip install isort
-script: ./test.bash
+script: ./test.sh

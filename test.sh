@@ -1,6 +1,7 @@
 #! /bin/bash
 
-function install_emacs24 {
+
+install_emacs24() {
     sudo add-apt-repository ppa:cassou/emacs -y
     sudo apt-get update -y
 
@@ -8,31 +9,43 @@ function install_emacs24 {
 }
 
 
-function install_package {
+install_package() {
     emacs -nw py-isort.el -f package-install-from-buffer -f kill-emacs
 }
 
 
-function test_01 {
+on_error() {
+    local msg=$1
+
+    echo $msg
+    exit 1
+}
+
+
+test_01() {
     emacs -nw ./test_data/test_01_before.py -f py-isort-before-save -f save-buffer -f save-buffers-kill-terminal
     diff ./test_data/test_01_before.py ./test_data/test_01_after.py
+
     if [ $? != 0 ]; then
-        exit 1
+        on_error "test_01"
     fi
 }
 
 
-function test_02 {
+test_02() {
     emacs -nw ./test_data/test_02/test_02_before.py -f py-isort-before-save -f save-buffer -f save-buffers-kill-terminal
     diff ./test_data/test_02/test_02_before.py ./test_data/test_02/test_02_after.py
+
     if [ $? != 0 ]; then
-        exit 1
+        on_error "test_02"
     fi
 }
 
 
-function main {
-    install_emacs24
+main() {
+    if [ "$TRAVIS" = "true" ]; then
+        install_emacs24
+    fi
     install_package
 
     test_01
