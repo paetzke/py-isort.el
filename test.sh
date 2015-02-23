@@ -43,6 +43,13 @@ test_02() {
 }
 
 
+test_03() {
+    emacs --no-init-file -nw py-isort.el \
+          -f package-install-from-buffer \
+          -f kill-emacs
+}
+
+
 main() {
     if [ "$TRAVIS" = "true" ]; then
         install_emacs24
@@ -50,6 +57,10 @@ main() {
 
     test_01
     test_02
+
+    if [ "$TRAVIS" = "true" ]; then
+        test_03
+    fi
 }
 
 
