@@ -50,6 +50,20 @@ test_03() {
 }
 
 
+test_04() {
+    emacs --no-init-file --load py-isort.el -nw ./test_data/test_04/before.py \
+          -f mark-whole-buffer \
+          -f py-isort-region \
+          -f save-buffer \
+          -f save-buffers-kill-terminal
+    diff ./test_data/test_04/before.py ./test_data/test_04/after.py
+
+    if [ $? != 0 ]; then
+        on_error "test_04"
+    fi
+}
+
+
 main() {
     if [ "$TRAVIS" = "true" ]; then
         install_emacs24
@@ -57,6 +71,7 @@ main() {
 
     test_01
     test_02
+    test_04
 
     if [ "$TRAVIS" = "true" ]; then
         test_03
