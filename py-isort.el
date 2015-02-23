@@ -35,7 +35,7 @@
   :type '(repeat (string :tag "option")))
 
 
-(defun py-isort-apply-rcs-patch (patch-buffer)
+(defun py-isort--apply-rcs-patch (patch-buffer)
   "Apply an RCS-formatted diff from PATCH-BUFFER to the current buffer."
   (let ((target-buffer (current-buffer))
         (line-offset 0))
@@ -44,7 +44,7 @@
         (goto-char (point-min))
         (while (not (eobp))
           (unless (looking-at "^\\([ad]\\)\\([0-9]+\\) \\([0-9]+\\)")
-            (error "invalid rcs patch or internal error in py-isort-apply-rcs-patch"))
+            (error "invalid rcs patch or internal error in py-isort--apply-rcs-patch"))
           (forward-line)
           (let ((action (match-string 1))
                 (from (string-to-number (match-string 2)))
@@ -66,17 +66,17 @@
                 (setq line-offset (+ line-offset len))
                 (kill-whole-line len)))
              (t
-              (error "invalid rcs patch or internal error in py-isort-apply-rcs-patch")))))))))
+              (error "invalid rcs patch or internal error in py-isort--apply-rcs-patch")))))))))
 
 
-(defun py-isort-replace-region (filename)
+(defun py-isort--replace-region (filename)
     (delete-region (region-beginning) (region-end))
     (insert-file-contents filename)
   )
 
 
 ;;;###autoload
-(defun py-isort (&optional only-on-region)
+(defun py-isort--sort (&optional only-on-region)
   "Uses the \"isort\" tool to reformat the current buffer."
   (interactive "r")
   (when (not (executable-find "isort"))
@@ -110,8 +110,8 @@
               (message "Buffer is already isorted"))
 
           (if only-on-region
-              (py-isort-replace-region tmpfile)
-            (py-isort-apply-rcs-patch patchbuf))
+              (py-isort--replace-region tmpfile)
+            (py-isort--apply-rcs-patch patchbuf))
 
           (kill-buffer errbuf)
           (message "Applied isort."))
@@ -124,14 +124,21 @@
 (defun py-isort-region ()
   "Uses the \"isort\" tool to reformat the current region."
   (interactive)
-  (py-isort t))
+  (py-isort--sort t))
+
+
+;;;###autoload
+(defun py-isort-buffer ()
+  "Uses the \"isort\" tool to reformat the current buffer."
+  (interactive)
+  (py-isort--sort nil))
 
 
 ;;;###autoload
 (defun py-isort-before-save ()
   (interactive)
   (when (eq major-mode 'python-mode)
-    (condition-case err (py-isort)
+    (condition-case err (py-isort--sort)
       (error (message "%s" (error-message-string err))))))
 
 
