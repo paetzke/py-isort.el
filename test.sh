@@ -18,7 +18,10 @@ on_error() {
 
 
 test_01() {
-    emacs --no-init-file --load py-isort.el -nw ./test_data/test_01/before.py -f py-isort-before-save -f save-buffer -f save-buffers-kill-terminal
+    emacs --no-init-file --load py-isort.el -nw ./test_data/test_01/before.py \
+          -f py-isort-before-save \
+          -f save-buffer \
+          -f save-buffers-kill-terminal
     diff ./test_data/test_01/before.py ./test_data/test_01/after.py
 
     if [ $? != 0 ]; then
@@ -28,7 +31,10 @@ test_01() {
 
 
 test_02() {
-    emacs --no-init-file --load py-isort.el -nw ./test_data/test_02/before.py -f py-isort-before-save -f save-buffer -f save-buffers-kill-terminal
+    emacs --no-init-file --load py-isort.el -nw ./test_data/test_02/before.py \
+          -f py-isort-before-save \
+          -f save-buffer \
+          -f save-buffers-kill-terminal
     diff ./test_data/test_02/before.py ./test_data/test_02/after.py
 
     if [ $? != 0 ]; then
