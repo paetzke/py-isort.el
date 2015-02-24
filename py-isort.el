@@ -77,7 +77,7 @@
 (defun py-isort--sort (&optional only-on-region)
   "Uses the \"isort\" tool to reformat the current buffer."
   (interactive "r")
-  (when (not (executable-find "isort"))
+  (unless (executable-find "isort")
     (error "\"isort\" command not found. Install isort with \"pip install isort\""))
   (let ((default-directory (file-name-directory buffer-file-name))
         (tmpfile (make-temp-file "isort" nil ".py"))
