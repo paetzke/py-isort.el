@@ -71,8 +71,7 @@
 
 (defun py-isort--replace-region (filename)
     (delete-region (region-beginning) (region-end))
-    (insert-file-contents filename)
-  )
+    (insert-file-contents filename))
 
 
 (defun py-isort--sort (&optional only-on-region)
@@ -80,14 +79,12 @@
   (interactive "r")
   (when (not (executable-find "isort"))
     (error "\"isort\" command not found. Install isort with \"pip install isort\""))
-  (let (
-        (default-directory (file-name-directory buffer-file-name))
+  (let ((default-directory (file-name-directory buffer-file-name))
         (tmpfile (make-temp-file "isort" nil ".py"))
         (patchbuf (get-buffer-create "*isort patch*"))
         (errbuf (get-buffer-create "*isort Errors*"))
         (coding-system-for-read 'utf-8)
-        (coding-system-for-write 'utf-8)
-        )
+        (coding-system-for-write 'utf-8))
 
     (with-current-buffer errbuf
       (setq buffer-read-only nil)
