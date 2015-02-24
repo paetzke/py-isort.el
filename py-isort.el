@@ -75,7 +75,6 @@
   )
 
 
-;;;###autoload
 (defun py-isort--sort (&optional only-on-region)
   "Uses the \"isort\" tool to reformat the current buffer."
   (interactive "r")
