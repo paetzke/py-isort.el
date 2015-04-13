@@ -1,6 +1,6 @@
 language: python
 python:
-- "3.4"
+  - "3.4"
 install:
- - pip install isort
-script: ./test.sh
+  - pip install isort
+script: ./tests.sh
