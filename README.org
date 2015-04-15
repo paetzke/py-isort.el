@@ -42,37 +42,17 @@ You can also sort a region in the buffer by using =py-isort-region=.
 M-x py-isort-region RET
 #+END_SRC
 
-** CREDITS
 
-Thanks to:
+** Bugs and improvements
 
-- Fredrik Bergroth
-- Steve Purcell
-- Syohei Yoshida
-- Tristan Seligmann
-- Jonathan Chu
-- Laszlo Szathmary <jabbalaci>
-
-** CHANGELOG
-
-*** 0.7
-- Add =py-isort-region= to sort the region in the buffer.
-
-*** 0.6
-- By passing the path of current buffer to isort (--setting-path), isort searches for configuration files in that path.
-
-*** 0.5
-- Fixed typo.
-
-*** 0.4
-- Replaced incf and decf.
-
-*** 0.3
-- Added check if isort executable is present.
-
-*** 0.2
-- Added options to change =isort='s behaviour.
+Feel free to open tickets or send pull requests with improvements.
+These [[https://github.com/paetzke/py-isort.el/graphs/contributors][contributors]] have done so.
 
 
+** Copyright
 
-Copyright (C) 2014, Friedrich Paetzke (paetzke@fastmail.fm). All rights reserved.
+Copyright (c) 2014-2015 Friedrich Pätzke.
+See [[LICENSE]] for further details.
+
+
+Greetings. [[https://twitter.com/paetzke][Friedrich]].
