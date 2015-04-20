@@ -23,6 +23,7 @@
 
 ;;; Code:
 
+
 (defgroup py-isort nil
   "Use isort to sort the imports in a Python buffer."
   :group 'convenience
@@ -35,67 +36,39 @@
   :type '(repeat (string :tag "option")))
 
 
-(defun py-isort--sort (&optional only-on-region)
-  "Uses the \"isort\" tool to reformat the current buffer."
-  (interactive "r")
-  (unless (executable-find "isort")
-    (error "\"isort\" command not found. Install isort with \"pip install isort\""))
-  (let ((default-directory (file-name-directory buffer-file-name))
-        (tmpfile (make-temp-file "isort" nil ".py"))
-        (patchbuf (get-buffer-create "*isort patch*"))
-        (errbuf (get-buffer-create "*isort Errors*"))
-        (coding-system-for-read 'utf-8)
-        (coding-system-for-write 'utf-8))
+(defun py-isort--call-executable (errbuf file)
+  (let ((default-directory (file-name-directory buffer-file-name)))
+    (zerop (apply 'call-process "isort" nil errbuf nil
+                  (append `(" " , file, " ",
+                            (concat "--settings-path=" default-directory))
+                          py-isort-options)))))
 
-    (with-current-buffer errbuf
-      (setq buffer-read-only nil)
-      (erase-buffer))
-    (with-current-buffer patchbuf
-      (erase-buffer))
 
-    (if (and only-on-region (use-region-p))
-        (write-region (region-beginning) (region-end) tmpfile)
-      (write-region nil nil tmpfile))
-
-    (if (zerop (apply 'call-process "isort" nil errbuf nil
-                      (append `(" " , tmpfile, " ",
-                                (concat "--settings-path=" default-directory))
-                              py-isort-options)))
-        (if (zerop (call-process-region (point-min) (point-max) "diff" nil patchbuf nil "-n" "-" tmpfile))
-            (progn
-              (kill-buffer errbuf)
-              (message "Buffer is already isorted"))
-
-          (if only-on-region
-              (py-isort-bf--replace-region tmpfile)
-            (py-isort-bf--apply-rcs-patch patchbuf))
-
-          (kill-buffer errbuf)
-          (message "Applied isort."))
-      (error "Could not apply isort. Check *isort Errors* for details"))
-    (kill-buffer patchbuf)
-    (delete-file tmpfile)))
+(defun py-isort--call (only-on-region)
+  (py-isort-bf--apply-executable-to-buffer "isort"
+                                           'py-isort--call-executable
+                                           only-on-region))
 
 
 ;;;###autoload
 (defun py-isort-region ()
   "Uses the \"isort\" tool to reformat the current region."
   (interactive)
-  (py-isort--sort t))
+  (py-isort--call t))
 
 
 ;;;###autoload
 (defun py-isort-buffer ()
   "Uses the \"isort\" tool to reformat the current buffer."
   (interactive)
-  (py-isort--sort nil))
+  (py-isort--call nil))
 
 
 ;;;###autoload
 (defun py-isort-before-save ()
   (interactive)
   (when (eq major-mode 'python-mode)
-    (condition-case err (py-isort--sort)
+    (condition-case err (py-isort-buffer)
       (error (message "%s" (error-message-string err))))))
 
 
