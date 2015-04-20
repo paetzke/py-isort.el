@@ -35,11 +35,6 @@
   :type '(repeat (string :tag "option")))
 
 
-(defun py-isort--replace-region (filename)
-    (delete-region (region-beginning) (region-end))
-    (insert-file-contents filename))
-
-
 (defun py-isort--sort (&optional only-on-region)
   "Uses the \"isort\" tool to reformat the current buffer."
   (interactive "r")
@@ -72,7 +67,7 @@
               (message "Buffer is already isorted"))
 
           (if only-on-region
-              (py-isort--replace-region tmpfile)
+              (py-isort-bf--replace-region tmpfile)
             (py-isort-bf--apply-rcs-patch patchbuf))
 
           (kill-buffer errbuf)
