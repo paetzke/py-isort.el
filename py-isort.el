@@ -23,6 +23,7 @@
 
 ;;; Code:
 
+
 (defgroup py-isort nil
   "Use isort to sort the imports in a Python buffer."
   :group 'convenience
@@ -35,7 +36,52 @@
   :type '(repeat (string :tag "option")))
 
 
-(defun py-isort--apply-rcs-patch (patch-buffer)
+(defun py-isort--call-executable (errbuf file)
+  (let ((default-directory (file-name-directory buffer-file-name)))
+    (zerop (apply 'call-process "isort" nil errbuf nil
+                  (append `(" " , file, " ",
+                            (concat "--settings-path=" default-directory))
+                          py-isort-options)))))
+
+
+(defun py-isort--call (only-on-region)
+  (py-isort-bf--apply-executable-to-buffer "isort"
+                                           'py-isort--call-executable
+                                           only-on-region))
+
+
+;;;###autoload
+(defun py-isort-region ()
+  "Uses the \"isort\" tool to reformat the current region."
+  (interactive)
+  (py-isort--call t))
+
+
+;;;###autoload
+(defun py-isort-buffer ()
+  "Uses the \"isort\" tool to reformat the current buffer."
+  (interactive)
+  (py-isort--call nil))
+
+
+;;;###autoload
+(defun py-isort-before-save ()
+  (interactive)
+  (when (eq major-mode 'python-mode)
+    (condition-case err (py-isort-buffer)
+      (error (message "%s" (error-message-string err))))))
+
+
+;; BEGIN GENERATED -----------------
+;; !!! This file is generated !!!
+;; buftra.el
+;; Copyright (C) 2015, Friedrich Paetzke <paetzke@fastmail.fm>
+;; Author: Friedrich Paetzke <paetzke@fastmail.fm>
+;; URL: https://github.com/paetzke/buftra.el
+;; Version: 0.3
+
+
+(defun py-isort-bf--apply-rcs-patch (patch-buffer)
   "Apply an RCS-formatted diff from PATCH-BUFFER to the current buffer."
   (let ((target-buffer (current-buffer))
         (line-offset 0))
@@ -44,7 +90,7 @@
         (goto-char (point-min))
         (while (not (eobp))
           (unless (looking-at "^\\([ad]\\)\\([0-9]+\\) \\([0-9]+\\)")
-            (error "invalid rcs patch or internal error in py-isort--apply-rcs-patch"))
+            (error "invalid rcs patch or internal error in py-isort-bf--apply-rcs-patch"))
           (forward-line)
           (let ((action (match-string 1))
                 (from (string-to-number (match-string 2)))
@@ -66,26 +112,23 @@
                 (setq line-offset (+ line-offset len))
                 (kill-whole-line len)))
              (t
-              (error "invalid rcs patch or internal error in py-isort--apply-rcs-patch")))))))))
+              (error "invalid rcs patch or internal error in py-isort-bf-apply--rcs-patch")))))))))
 
 
-(defun py-isort--replace-region (filename)
-    (delete-region (region-beginning) (region-end))
-    (insert-file-contents filename))
+(defun py-isort-bf--replace-region (filename)
+  (delete-region (region-beginning) (region-end))
+  (insert-file-contents filename))
 
 
-(defun py-isort--sort (&optional only-on-region)
-  "Uses the \"isort\" tool to reformat the current buffer."
-  (interactive "r")
-  (unless (executable-find "isort")
-    (error "\"isort\" command not found. Install isort with \"pip install isort\""))
-  (let ((default-directory (file-name-directory buffer-file-name))
-        (tmpfile (make-temp-file "isort" nil ".py"))
-        (patchbuf (get-buffer-create "*isort patch*"))
-        (errbuf (get-buffer-create "*isort Errors*"))
-        (coding-system-for-read 'utf-8)
-        (coding-system-for-write 'utf-8))
-
+(defun py-isort-bf--apply-executable-to-buffer (executable-name executable-call only-on-region)
+  "Formats the current buffer according to the executable"
+  (when (not (executable-find executable-name))
+    (error (format "%s command not found." executable-name)))
+  (let ((tmpfile (make-temp-file executable-name nil ".py"))
+        (patchbuf (get-buffer-create (format "*%s patch*" executable-name)))
+        (errbuf (get-buffer-create (format "*%s Errors*" executable-name)))
+        (coding-system-for-read buffer-file-coding-system)
+        (coding-system-for-write buffer-file-coding-system))
     (with-current-buffer errbuf
       (setq buffer-read-only nil)
       (erase-buffer))
@@ -96,46 +139,27 @@
         (write-region (region-beginning) (region-end) tmpfile)
       (write-region nil nil tmpfile))
 
-    (if (zerop (apply 'call-process "isort" nil errbuf nil
-                      (append `(" " , tmpfile, " ",
-                                (concat "--settings-path=" default-directory))
-                              py-isort-options)))
-        (if (zerop (call-process-region (point-min) (point-max) "diff" nil patchbuf nil "-n" "-" tmpfile))
+    (if (funcall executable-call errbuf tmpfile)
+        (if (zerop (call-process-region (point-min) (point-max) "diff" nil
+                                        patchbuf nil "-n" "-" tmpfile))
             (progn
               (kill-buffer errbuf)
-              (message "Buffer is already isorted"))
+              (message (format "Buffer is already %sed" executable-name)))
 
           (if only-on-region
-              (py-isort--replace-region tmpfile)
-            (py-isort--apply-rcs-patch patchbuf))
+              (py-isort-bf--replace-region tmpfile)
+            (py-isort-bf--apply-rcs-patch patchbuf))
 
           (kill-buffer errbuf)
-          (message "Applied isort."))
-      (error "Could not apply isort. Check *isort Errors* for details"))
+          (message (format "Applied %s" executable-name)))
+      (error (format "Could not apply %s. Check *%s Errors* for details"
+                     executable-name executable-name)))
     (kill-buffer patchbuf)
     (delete-file tmpfile)))
 
 
-;;;###autoload
-(defun py-isort-region ()
-  "Uses the \"isort\" tool to reformat the current region."
-  (interactive)
-  (py-isort--sort t))
-
-
-;;;###autoload
-(defun py-isort-buffer ()
-  "Uses the \"isort\" tool to reformat the current buffer."
-  (interactive)
-  (py-isort--sort nil))
-
-
-;;;###autoload
-(defun py-isort-before-save ()
-  (interactive)
-  (when (eq major-mode 'python-mode)
-    (condition-case err (py-isort--sort)
-      (error (message "%s" (error-message-string err))))))
+;; py-isort-bf.el ends here
+;; END GENERATED -------------------
 
 
 (provide 'py-isort)
