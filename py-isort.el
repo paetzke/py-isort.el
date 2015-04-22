@@ -47,7 +47,8 @@
 (defun py-isort--call (only-on-region)
   (py-isort-bf--apply-executable-to-buffer "isort"
                                            'py-isort--call-executable
-                                           only-on-region))
+                                           only-on-region
+                                           "py"))
 
 
 ;;;###autoload
@@ -78,7 +79,7 @@
 ;; Copyright (C) 2015, Friedrich Paetzke <paetzke@fastmail.fm>
 ;; Author: Friedrich Paetzke <paetzke@fastmail.fm>
 ;; URL: https://github.com/paetzke/buftra.el
-;; Version: 0.3
+;; Version: 0.4
 
 
 (defun py-isort-bf--apply-rcs-patch (patch-buffer)
@@ -120,11 +121,14 @@
   (insert-file-contents filename))
 
 
-(defun py-isort-bf--apply-executable-to-buffer (executable-name executable-call only-on-region)
+(defun py-isort-bf--apply-executable-to-buffer (executable-name
+                                           executable-call
+                                           only-on-region
+                                           file-extension)
   "Formats the current buffer according to the executable"
   (when (not (executable-find executable-name))
     (error (format "%s command not found." executable-name)))
-  (let ((tmpfile (make-temp-file executable-name nil ".py"))
+  (let ((tmpfile (make-temp-file executable-name nil (concat "." file-extension)))
         (patchbuf (get-buffer-create (format "*%s patch*" executable-name)))
         (errbuf (get-buffer-create (format "*%s Errors*" executable-name)))
         (coding-system-for-read buffer-file-coding-system)
