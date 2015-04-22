@@ -8,8 +8,8 @@
 
 ;;; Commentary:
 
-;; Provides the `py-isort' command, which uses the external "isort"
-;; tool to tidy up the imports in the current buffer.
+;; Provides commands, which use the external "isort" tool
+;; to tidy up the imports in the current buffer.
 
 ;; To automatically sort imports when saving a python file, use the
 ;; following code:

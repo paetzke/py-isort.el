@@ -3,7 +3,7 @@
 [[https://travis-ci.org/paetzke/py-isort.el][https://travis-ci.org/paetzke/py-isort.el.svg?branch=master]]
 [[http://melpa.org/#/py-isort][http://melpa.org/packages/py-isort-badge.svg]]
 
-Provides the =py-isort= command, which uses the external =isort= tool to tidy up the imports in the current buffer.
+Provides commands, which use the external =isort= tool to tidy up the imports in the current buffer.
 
 Install =isort= and download =py-isort=
 
@@ -36,11 +36,11 @@ To customize the behaviour of =isort= you can set the =py-isort-options= e.g.
 (setq py-isort-options '("--lines=100"))
 #+END_SRC
 
-You can also sort a region in the buffer by using =py-isort-region=.
 
-#+BEGIN_SRC lisp
-M-x py-isort-region RET
-#+END_SRC
+** Functions
+
+- =M-x py-isort-buffer RET=: Uses the =isort= tool to reformat the current buffer.
+- =M-x py-isort-region RET=: Uses the =isort= tool to reformat the current region.
 
 
 ** Bugs and improvements
@@ -55,4 +55,4 @@ Copyright (c) 2014-2015 Friedrich Pätzke.
 See [[LICENSE]] for further details.
 
 
-Greetings. [[https://twitter.com/paetzke][Friedrich]].
+So long. [[https://twitter.com/paetzke][Friedrich]].
