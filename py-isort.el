@@ -36,8 +36,14 @@
   :type '(repeat (string :tag "option")))
 
 
+(defun py-isort--find-settings-path ()
+  (expand-file-name
+   (or (locate-dominating-file buffer-file-name ".isort.cfg")
+       (file-name-directory buffer-file-name))))
+
+
 (defun py-isort--call-executable (errbuf file)
-  (let ((default-directory (file-name-directory buffer-file-name)))
+  (let ((default-directory (py-isort--find-settings-path)))
     (zerop (apply 'call-process "isort" nil errbuf nil
                   (append `(" " , file, " ",
                             (concat "--settings-path=" default-directory))
