@@ -47,12 +47,3 @@ To customize the behaviour of =isort= you can set the =py-isort-options= e.g.
 
 Feel free to open tickets or send pull requests with improvements.
 These [[https://github.com/paetzke/py-isort.el/graphs/contributors][contributors]] have done so.
-
-
-** Copyright
-
-Copyright (c) 2014-2015 Friedrich Pätzke.
-See [[LICENSE]] for further details.
-
-
-So long. [[https://twitter.com/paetzke][Friedrich]].
