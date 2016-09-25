@@ -67,6 +67,20 @@ test_04() {
 }
 
 
+test_05() {
+    echo $FUNCNAME
+    rm $TEST_FILE || true
+    emacs --no-init-file -nw \
+          --load ./tests/tests.el \
+          --load py-isort.el \
+          ./tests/05/files/before.py \
+          -f py-isort-buffer \
+          -f write-test-file \
+          -f kill-emacs
+    diff $TEST_FILE ./tests/05/files/after.py
+}
+
+
 test_install_package() {
     echo $FUNCNAME
     emacs --no-init-file -nw \
@@ -86,6 +100,7 @@ main() {
     test_02
     test_03
     test_04
+    test_05
 }
 
 
