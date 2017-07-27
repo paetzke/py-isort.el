@@ -41,6 +41,28 @@ To customize the behaviour of =isort= you can set the =py-isort-options= e.g.
 
 - =M-x py-isort-buffer RET=: Uses the =isort= tool to reformat the current buffer.
 - =M-x py-isort-region RET=: Uses the =isort= tool to reformat the current region.
+- =M-x py-isort-add-import RET=: Asks for a module that should be added to the
+  current buffer. (With =import module.name=)
+- =M-x py-isort-add-from-import RET=: Asks for a module and module item that
+  should be added to the current buffer. (With =from module import item=)
+- =M-x py-isort-remove-import RET=: Asks for a module that should be removed from
+  the current buffer, without having to be concerned with how it was originally
+  formatted.
+- =M-x py-isort-add-import-region=: Import a module from region.
+
+  Import modules from region and then delete the region. If you have
+  `whole-line-or-region' installed it may be useful to define a function like:
+
+  #+BEGIN_SRC elisp
+  (defun py-isort-add-import-whole-line-or-region ()
+    "Import module(s) from region or whole line."
+    (interactive)
+    (whole-line-or-region-call-with-region 'py-isort-add-import-region))
+  #+END_SRC
+
+  Then you can just type your import (with working autocomplete) wherever you
+  are in your code, call this function and the import will be properly sorted to
+  your normal python imports.
 
 
 ** Bugs and improvements

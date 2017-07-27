@@ -30,10 +30,13 @@
   :prefix "py-isort-")
 
 
+;;;###autoload
 (defcustom py-isort-options nil
   "Options used for isort."
   :group 'py-isort
+  :safe 'listp
   :type '(repeat (string :tag "option")))
+;;;###autoload(put 'py-isort-options 'safe-local-variable #'listp)
 
 
 (defun py-isort--find-settings-path ()
@@ -55,6 +58,57 @@
                                            'py-isort--call-executable
                                            only-on-region
                                            "py"))
+
+
+;;;###autoload
+(defun py-isort-remove-import (import-string)
+  "Use the \"isort\" tool to remove module IMPORT-STRING from buffer."
+  (interactive "*sImport: ")
+  (let ((py-isort-options
+         (cons (format "-r %s" import-string) py-isort-options)))
+    (py-isort--call nil)))
+
+
+;;;###autoload
+(defun py-isort-add-import (import-string)
+  "Use the \"isort\" tool to import module IMPORT-STRING."
+  (interactive "*sImport: ")
+  (let ((py-isort-options
+         (cons (format "-a import %s" import-string) py-isort-options)))
+    (py-isort--call nil)))
+
+
+;;;###autoload
+(defun py-isort-add-from-import (from-string import-string)
+  "Use the \"isort\" tool to add \"from FROM-STRING import IMPORT-STRING\"."
+  (interactive "*sFrom:\nsImport: ")
+  (let ((py-isort-options
+         (cons (format "-a from %s import %s" from-string import-string)
+               py-isort-options)))
+    (py-isort--call nil)))
+
+
+;;;###autoload
+(defun py-isort-add-import-region (start end)
+  "Use the \"isort\" tool to import the module(s) from region.
+
+Import modules from point START to END and then delete the
+region.  If you have `whole-line-or-region' installed it may be
+useful to define a function like:
+
+  (defun py-isort-add-import-whole-line-or-region ()
+    \"Import module(s) from region or whole line.\"
+    (interactive)
+    (whole-line-or-region-call-with-region 'py-isort-add-import-region))
+
+Then you can just type your import (with working autocomplete)
+wherever you are in your code, call this function and the import
+will be properly sorted to your normal python imports."
+  (interactive "*r")
+  (let ((py-isort-options
+         (cons (format "-a %s" (delete-and-extract-region start end) ) py-isort-options)))
+    (py-isort--call nil)))
+
 
 
 ;;;###autoload
