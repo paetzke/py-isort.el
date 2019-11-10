@@ -20,6 +20,7 @@
 ;; py-isort-options e.g.
 
 ;;   (setq py-isort-options '("--lines=100"))
+;;   (setq py-isort-executable '("isort"))
 
 ;;; Code:
 
@@ -36,6 +37,12 @@
   :type '(repeat (string :tag "option")))
 
 
+(defcustom py-isort-executable "isort"
+  "Name or path to the isory executable"
+  :group 'py-isort
+  :type '(repeat (string :tag "option")))
+
+
 (defun py-isort--find-settings-path ()
   (expand-file-name
    (or (locate-dominating-file buffer-file-name ".isort.cfg")
@@ -44,14 +51,14 @@
 
 (defun py-isort--call-executable (errbuf file)
   (let ((default-directory (py-isort--find-settings-path)))
-    (zerop (apply 'call-process "isort" nil errbuf nil
+    (zerop (apply 'call-process py-isort-executable nil errbuf nil
                   (append `(" " , file, " ",
                             (concat "--settings-path=" default-directory))
                           py-isort-options)))))
 
 
 (defun py-isort--call (only-on-region)
-  (py-isort-bf--apply-executable-to-buffer "isort"
+  (py-isort-bf--apply-executable-to-buffer py-isort-executable
                                            'py-isort--call-executable
                                            only-on-region
                                            "py"))

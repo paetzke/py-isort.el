@@ -34,6 +34,7 @@ To customize the behaviour of =isort= you can set the =py-isort-options= e.g.
 
 #+BEGIN_SRC lisp
 (setq py-isort-options '("--lines=100"))
+(setq py-isort-executable "/path/to/custom/isort")
 #+END_SRC
 
 
