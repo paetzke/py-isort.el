@@ -37,9 +37,11 @@
 
 
 (defun py-isort--find-settings-path ()
-  (expand-file-name
-   (or (locate-dominating-file buffer-file-name ".isort.cfg")
-       (file-name-directory buffer-file-name))))
+  (if (string-match-p "\\*Org Src .*\\[ python \\]\\*" (buffer-name))
+      default-directory
+    (expand-file-name
+     (or (locate-dominating-file buffer-file-name ".isort.cfg")
+        (file-name-directory buffer-file-name)))))
 
 
 (defun py-isort--call-executable (errbuf file)
