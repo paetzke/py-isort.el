@@ -20,12 +20,12 @@ M-x package-install RET
 py-isort RET
 #+END_SRC
 
-Add the =before-save-hook= to your =~/.emacs=
+Add this code to your =~/.emacs=
 
 #+BEGIN_SRC lisp
 (add-to-list 'load-path "/your/path/")
 (require 'py-isort)
-(add-hook 'before-save-hook 'py-isort-before-save)
+(add-hook 'python-mode-hook #'isort-mode)
 #+END_SRC
 
 Now every time you save your Python file =isort= will be executed on the current buffer.
