@@ -38,8 +38,14 @@
 
 (defun py-isort--find-settings-path ()
   (expand-file-name
-   (or (locate-dominating-file buffer-file-name ".isort.cfg")
-       (file-name-directory buffer-file-name))))
+   (if (buffer-file-name)
+       (or (locate-dominating-file (file-name-directory buffer-file-name)
+                                   (lambda (p)
+                                     (directory-files (file-name-directory p)
+                                                      nil
+                                                      "^\\(.isort.cfg\\|pyproject.toml\\|setup.cfg\\|.editorconfig\\)$")))
+           (file-name-directory buffer-file-name))
+     default-directory)))
 
 
 (defun py-isort--call-executable (errbuf file)
