@@ -38,7 +38,8 @@
 
 (defun py-isort--find-settings-path ()
   (expand-file-name
-   (or (locate-dominating-file buffer-file-name ".isort.cfg")
+   (or (locate-dominating-file buffer-file-name "pyproject.toml")
+       (locate-dominating-file buffer-file-name ".isort.cfg")
        (file-name-directory buffer-file-name))))
 
 
